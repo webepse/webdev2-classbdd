@@ -56,4 +56,38 @@ class Database{
         $datas = $req->fetchAll(PDO::FETCH_CLASS,__NAMESPACE__."\\".$className);
         return $datas;
     }
+
+    /**
+     * Permet de créer une requête prepare à la base de données
+     * @param string $statement
+     * @param array $values
+     * @param string $class_name
+     * @param bool $one
+     * @return Article|array|null
+     */
+    public function prepare(string $statement,array $values,string $class_name,bool $one=false): Article|array|bool
+    {
+        $req = $this->getBDD()->prepare($statement);
+        $req->execute($values);
+        $req->setFetchMode(PDO::FETCH_CLASS,__NAMESPACE__.'\\'.$class_name);
+        if($one){
+            $datas = $req->fetch();
+            $req->closeCursor();
+        } else{
+            $datas = $req->fetchall();
+        }
+        return $datas;
+    }
+
+    /**
+     * Permet d'ajouter un post à la base de données
+     * @param string $title
+     * @param string $content
+     * @return void
+     */
+    public function addPost(string $title, string $content) : void
+    {
+        $req = $this->getBDD()->prepare("INSERT INTO posts(title,content,creation_date) VALUES(?,?,NOW())");
+        $req->execute(array($title,$content));
+    }
 }

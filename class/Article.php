@@ -15,9 +15,9 @@ class Article{
     public function getExtrait(){
         $texte = strip_tags($this->content);
         if(preg_match("#(\w+\W+){20}\w+#s",$texte, $out)){
-            $html = "<div>".$out[0]."...<a href='".$this->getURL()."'>Voir la suite</a></div>";
+            $html = "<p class='card-text text-secondary mb-3 flex-grow-1'>".$out[0]."...</p><a href='".$this->getURL()."' class='btn btn-primary'>Voir la suite</a>";
         }else{
-            $html = "<div>".$texte."</div>";
+            $html = "<p class='card-text text-secondary mb-3 flex-grow-1'>".$texte."</p>";
         }
 
         return $html;
